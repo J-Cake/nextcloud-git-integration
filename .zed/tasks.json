@@ -1,0 +1,14 @@
+// Project tasks configuration. See https://zed.dev/docs/tasks for documentation.
+//
+// Example:
+[
+	{
+		"label": "Run Server",
+		"command": "cargo run",
+		"env": { "RUST_LOG": "git_server=debug,route=debug,info" },
+		"use_new_terminal": false,
+		"allow_concurrent_runs": false,
+		"reveal": "never",
+		"reveal_target": "dock"
+	}
+]
