@@ -1,5 +1,6 @@
 mod auth;
 mod http_request;
+mod git;
 
 use axum::body::Body;
 use axum::http::Request;
@@ -52,6 +53,9 @@ pub async fn main() {
 
     let app = NormalizePathLayer::trim_trailing_slash()
         .layer(Router::new()
+        	.route("/{repo}/info/refs", axum::routing::get(git::info))
+        	.route("/{repo}/git-upload-pack", axum::routing::post(git::upload))
+         	.route("/{repo}/git-receive-pack", axum::routing::post(git::receive))
 
             // Middleware sind zusätzliche schritte die vor der Business-logic stattfinden und bereiten sozusagen die Anfrage für die entgültige verarbeitung vor.
             .layer(axum::middleware::from_fn_with_state(state.clone(), auth::auth_jwt))
