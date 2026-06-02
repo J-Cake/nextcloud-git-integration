@@ -39,5 +39,6 @@ ENV SQLITE_DATABASE=nextcloud \
     NEXTCLOUD_TRUSTED_DOMAINS="localhost 127.0.0.1"
 
 EXPOSE 80 443 443/udp
+VOLUME /var/www/html
 
 ENTRYPOINT ["/dev-entrypoint.sh"]

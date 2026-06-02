@@ -1,9 +1,9 @@
 {
 	"issuer": "localhost",
-	"authorization_endpoint": "http://localhost:9999/auth.html",
-	"token_endpoint": "http://localhost:9999/token.json",
-	"userinfo_endpoint": "http://localhost:9999/userinfo.json",
-	"jwks_uri": "http://localhost:9999/jwks.json",
+	"authorization_endpoint": "http://localhost:2560/auth.html",
+	"token_endpoint": "http://localhost:2560/token.json",
+	"userinfo_endpoint": "http://localhost:2560/userinfo.json",
+	"jwks_uri": "http://localhost:2560/jwks.json",
 	"scopes_supported": ["openid", "email", "profile"],
 	"response_types_supported": ["token"],
 	"subject_types_supported": ["public"],
