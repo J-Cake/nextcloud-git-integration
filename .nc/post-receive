@@ -1,0 +1,23 @@
+#!/usr/bin/env bash
+# Post-receive hook for git repos served into Nextcloud
+# Install at: <repo>/hooks/post-receive
+
+set -euo pipefail
+
+REPO_DIR="$(pwd)"
+NEXTCLOUD_ROOT="${NEXTCLOUD_ROOT:-/var/www/nextcloud}"
+NC_USER="${NC_USER:-}"  # Nextcloud username that owns the repo
+
+# Touch the sentinel file so the storage wrapper detects a mtime change
+touch "${REPO_DIR}/.git-mtime"
+
+# Trigger a targeted Nextcloud rescan
+if [[ -n "$NC_USER" ]]; then
+    php "${NEXTCLOUD_ROOT}/occ" files:scan \
+        --path="/${NC_USER}/files" \
+        --shallow \
+        --quiet \
+        || true   # don't fail the push if rescan fails
+fi
+
+echo "gitviewer: repository index updated"
