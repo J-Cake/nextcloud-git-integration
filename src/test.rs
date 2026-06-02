@@ -16,7 +16,7 @@ mod test {
 	#[tokio::main]
 	#[test]
 	async fn test_token() -> Result<(), reqwest::Error> {
-		let res = get::<serde_json::Value>("http://localhost:1920/uuid/info/res").await?;
+		let res = get::<serde_json::Value>("http://localhost:1920/uuid/info/refs").await?;
 		println!("Res: {res:#?}");
 
 		Ok(())

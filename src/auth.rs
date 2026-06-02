@@ -54,6 +54,8 @@ pub async fn auth_jwt(config: State, mut req: Request<Body>, next: axum::middlew
     validation.set_audience(&[&config.args.audience]);
     validation.set_issuer(&[&oidc.issuer]);
 
+    validation.validate_exp = false;
+
     let Some(jsonwebtoken::TokenData { claims: token, .. }) = validate_token(token, validation, jwks) else {
         return (StatusCode::UNAUTHORIZED, Json(json! {{
             "success": false,

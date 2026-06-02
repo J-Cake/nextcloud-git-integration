@@ -5,12 +5,14 @@ use axum::extract::Path;
 use axum::extract::Query;
 use serde::Deserialize;
 
-#[derive(Deserialize)]
+#[derive(Debug, Deserialize)]
 pub(crate) struct InfoRefsQuery {
     service: String,
 }
 
 pub(crate) async fn info(Path(repo): Path<String>, Query(q): Query<InfoRefsQuery>) -> impl IntoResponse {
+	log::debug!("Repository: {repo}: {q:?}");
+
 	match q.service.as_str() {
 		"git-upload-pack" => todo!(),
 		"git-receive-pack" => todo!(),

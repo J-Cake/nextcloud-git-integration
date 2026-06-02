@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="en">
+	<body>
+		<h1>OIDC Implicit Flow Simulator</h1>
+		<p>This file reads the token URL and returns it as if it were a true implicit OIDC flow</p>
+		<button onclick="login()">Log In</button>
+		<script>
+			async function login() {
+				const params = new URLSearchParams(window.location.search);
+				const redirectUri = params.get('redirect_uri');
+				const state = params.get('state');
+
+				const token = await fetch('/.well-known/openid-configuration')
+					.then(res => res.json())
+					.then(oidc => fetch(oidc.token_endpoint))
+					.then(res => res.json())
+					.then(tokens => tokens.access_token);
+
+				const fragment = new URLSearchParams({
+					access_token: token,
+					token_type: "Bearer",
+					state: state,
+				});
+
+				window.location.href = redirectUri + '#' + fragment.toString();
+			}
+		</script>
+	</body>
+</html>
