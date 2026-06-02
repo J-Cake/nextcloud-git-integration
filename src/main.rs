@@ -1,3 +1,5 @@
+#![feature(stmt_expr_attributes)]
+
 mod auth;
 mod http_request;
 mod git;

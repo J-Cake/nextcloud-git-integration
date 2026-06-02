@@ -8,7 +8,7 @@ mod test {
 	use serde::de::DeserializeOwned;
 	use std::sync::LazyLock;
 
-	static TOKEN: &'static str = "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJsb2NhbGhvc3QiLCJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiYWRtaW4iOnRydWUsInNjb3BlcyI6WyJvcGVuaWQiLCJlbWFpbCIsInByb2ZpbGUiXX0.LhTFN4JUE0PMOiMSi4bbzncHXxNN3Z0UpFCyUeIL1O4hHwoFHpnWjJMAJf1oWWTaZIOsl1pMhaWJ6SswoAS7bTvH8sCXabGpvzkboy7so--Nk5bFR8GMOpo3zKcsvva6Xr97wYKsINt9TXzcCeDCabYHRHITfxTTyp73dlSC-XeGzqTT6Ou8BU9pRpQIG0i5SfROi311WxbWfCpGofdUv8EzK5BsAgrXNlTjiFcv1eYM5f4EAWC_WIz81HfdMZhbEZAf1ELDjF0XXrZmzzeVFgQsUO7zZ7eszH_c10KHxooZCHBQoQtrITbd5eIw5Ki296llLSCC_f5Qo_U7a4XyEg";
+	static TOKEN: LazyLock<String> = LazyLock::new(|| std::env::var("TOKEN").expect("TOKEN required"));
 	static CLIENT: LazyLock<reqwest::Client> = LazyLock::new(|| reqwest::Client::builder()
 		.build()
 		.expect("Failed to initialise client"));
@@ -24,7 +24,7 @@ mod test {
 
 	async fn get<Res: DeserializeOwned>(url: impl IntoUrl) -> reqwest::Result<Res> {
 		return CLIENT.get(url)
-			.bearer_auth(TOKEN)
+			.bearer_auth(TOKEN.as_str())
 			.send()
 			.await?
 			.json()
@@ -33,7 +33,7 @@ mod test {
 
 	async fn post<Res: DeserializeOwned>(url: impl IntoUrl, body: impl Serialize) -> reqwest::Result<Res> {
 		return CLIENT.post(url)
-			.bearer_auth(TOKEN)
+			.bearer_auth(TOKEN.as_str())
 			.json(&body)
 			.send()
 			.await?

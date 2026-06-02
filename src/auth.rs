@@ -54,23 +54,10 @@ pub async fn auth_jwt(config: State, mut req: Request<Body>, next: axum::middlew
     validation.set_audience(&[&config.args.audience]);
     validation.set_issuer(&[&oidc.issuer]);
 
-    let Some(token) = jwks
-        .keys
-        .iter()
-        .filter(|i| {
-            i.common
-                .public_key_use
-                .as_ref()
-                .is_some_and(|key| *key == PublicKeyUse::Signature)
-        })
-        .filter_map(|key| DecodingKey::from_jwk(key).ok())
-        .map(|key| jsonwebtoken::decode::<crate::auth::TokenData>(&token, &key, &validation))
-        .find_map(Result::ok)
-    else {
-        log::warn!("Invalid token received.");
+    let Some(jsonwebtoken::TokenData { claims: token, .. }) = validate_token(token, validation, jwks) else {
         return (StatusCode::UNAUTHORIZED, Json(json! {{
             "success": false,
-            "error": "Authorization failed because the token was invalid."
+            "error": "Token was rejected."
         }})).into_response();
     };
 
@@ -152,4 +139,30 @@ impl OIDCDiscoveryManager {
 
         data
     }
+}
+
+fn validate_token(token: impl AsRef<str>, validation: jsonwebtoken::Validation, jwks: JwkSet) -> Option<jsonwebtoken::TokenData<TokenData>> {
+    for key in jwks.keys.iter() {
+        if let Some(PublicKeyUse::Signature) = key.common.public_key_use {
+            let key = match DecodingKey::from_jwk(key) {
+                Ok(key) => key,
+                Err(err) => {
+                    log::trace!("Failing key: {err:?}");
+                    continue;
+                }
+            };
+
+            match jsonwebtoken::decode(token.as_ref(), &key, &validation) {
+                Ok(token) => return Some(token),
+                Err(err) => {
+                    log::trace!("Failing token: {err:?}");
+                    continue;
+                }
+            }
+        } else {
+            continue
+        }
+    }
+
+    None
 }

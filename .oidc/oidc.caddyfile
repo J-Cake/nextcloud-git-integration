@@ -1,4 +1,7 @@
 http://localhost:2560 {
+	header Access-Control-Allow-Origin *
+	header Access-Control-Allow-Method *
+
 	handle_path /.well-known/openid-configuration {
 		root * /var/www/html/discovery.json
 		file_server
