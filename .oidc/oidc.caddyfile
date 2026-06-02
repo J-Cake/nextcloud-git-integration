@@ -1,0 +1,9 @@
+http://localhost:9999 {
+	handle_path /.well-known/openid-configuration {
+		root * /var/www/html/discovery.json
+		file_server
+	}
+
+	root * /var/www/html
+	file_server
+}

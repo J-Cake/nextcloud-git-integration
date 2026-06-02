@@ -1,6 +1,7 @@
 mod auth;
 mod http_request;
 mod git;
+mod test;
 
 use axum::body::Body;
 use axum::http::Request;
@@ -10,6 +11,7 @@ use serde::{
     Deserialize,
     Serialize
 };
+use tower_http::cors::CorsLayer;
 use std::net::SocketAddr;
 use std::sync::Arc;
 use tower_http::normalize_path::NormalizePathLayer;
@@ -63,6 +65,7 @@ pub async fn main() {
                 "status": "healthy",
             }})))
             .with_state(state.clone())
+        .layer(CorsLayer::permissive())
         .layer(axum::middleware::from_fn(log_request)));
 
     let server = tokio::net::TcpListener::bind(&listen).await

@@ -1,5 +1,4 @@
 use axum::Json;
-use axum::http::Response;
 use axum::http::StatusCode;
 use axum::response::IntoResponse;
 use axum::extract::Path;
@@ -7,7 +6,7 @@ use axum::extract::Query;
 use serde::Deserialize;
 
 #[derive(Deserialize)]
-struct InfoRefsQuery {
+pub(crate) struct InfoRefsQuery {
     service: String,
 }
 
@@ -22,11 +21,16 @@ pub(crate) async fn info(Path(repo): Path<String>, Query(q): Query<InfoRefsQuery
 	}
 }
 
-pub(crate) async fn upload(Path(repo): Path<String>) -> Response {
-	todo!()
-
+pub(crate) async fn upload(Path(repo): Path<String>) -> impl IntoResponse {
+	(StatusCode::INTERNAL_SERVER_ERROR, Json(serde_json::json! {{
+		"success": false,
+		"error": "Method not implemented yet."
+	}})).into_response()
 }
 
-pub(crate) async fn receive(Path(repo): Path<String>) -> Response {
-	todo!()
+pub(crate) async fn receive(Path(repo): Path<String>) -> impl IntoResponse {
+	(StatusCode::INTERNAL_SERVER_ERROR, Json(serde_json::json! {{
+		"success": false,
+		"error": "Method not implemented yet."
+	}})).into_response()
 }

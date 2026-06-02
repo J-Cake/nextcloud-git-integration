@@ -38,7 +38,6 @@ pub async fn auth_jwt(config: State, mut req: Request<Body>, next: axum::middlew
     };
 
     let oidc = OIDC.get(&config.args.oidc).await;
-
     let jwks = match get_jwk(oidc.jwks_uri).await {
         Ok(jwks) => jwks,
         Err(err) => {

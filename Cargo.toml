@@ -12,7 +12,7 @@ tokio = { version = "1.51.1", features = ["full"] }
 serde = { version = "1.0.228", features = ["derive"] }
 serde_json = { version = "1.0.149" }
 toml = { version = "1.1.2+spec-1.1.0" }
-tower-http = { version = "0.6.8", features = ["normalize-path"] }
+tower-http = { version = "0.6.8", features = ["cors", "normalize-path"] }
 tower-layer = "0.3.3"
 sqlx = { version = "0.8.6", features = ["postgres", "runtime-tokio", "chrono", "derive", "json"] }
 jsonwebtoken = { version = "10.3.0", features = ["rust_crypto"] }
