@@ -4,8 +4,20 @@
 [
 	{
 		"label": "Run Server",
-		"command": "cargo run -- --oidc http://localhost:9999/.well-known/openid-configuration",
+		"command": "cargo run -- --oidc http://oidc-idp:2560/.well-known/openid-configuration",
 		"env": { "RUST_LOG": "git_server=debug,route=debug,info" },
+		"use_new_terminal": false,
+		"allow_concurrent_runs": false,
+		"reveal": "never",
+		"reveal_target": "dock"
+	},
+	{
+		"label": "Run Tests",
+		"command": "cargo test -- --nocapture",
+		"env": {
+			"RUST_LOG": "git_server=debug,route=debug,info",
+			"TOKEN": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJsb2NhbGhvc3QiLCJhdWQiOlsiYWNjb3VudCJdLCJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiZXhwIjoxNzgwNDMzODgwLCJhZG1pbiI6dHJ1ZSwicmVwbyI6IjZkMzY2NGVkLTc3ZWItNGIwMy1iNGRjLWMzYzk3YjVlODlkOSIsInNjb3BlcyI6WyJvcGVuaWQiLCJlbWFpbCIsInByb2ZpbGUiXX0.oEebqLzZdLc8tlGymALVdRYqPrX1e7Dur3Or_i6oNWN2YtHNMOrBGCxspq6k-SsovQpplrlrI0KgX7iF804i3tbdHrdCwMs0lv_UIJ_NbabvRc4lW__GNBeHNJuEZAAByBFEokn_PhRKlCqIwJx1hKXNb_IwTtd960gmYbksFTZ31pNytAS84UsQKmyW1jD_joFEXvrRzvg_qwYZUr0s_lJe7SId4E5hy9kUtQcxbxJN1pPSVSr4NX0LuwQK6nTuJiBAjKElyFyzHvNyqOSCg29qQtLe3kBqrree88FKVZGInQpv-56iYaa_mDeM3ouxkCB6gwKTWQ6R09MzGW95EA"
+		},
 		"use_new_terminal": false,
 		"allow_concurrent_runs": false,
 		"reveal": "never",

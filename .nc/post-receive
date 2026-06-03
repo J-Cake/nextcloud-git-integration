@@ -13,11 +13,11 @@ touch "${REPO_DIR}/.git-mtime"
 
 # Trigger a targeted Nextcloud rescan
 if [[ -n "$NC_USER" ]]; then
-    php "${NEXTCLOUD_ROOT}/occ" files:scan \
-        --path="/${NC_USER}/files" \
-        --shallow \
-        --quiet \
-        || true   # don't fail the push if rescan fails
+	php "${NEXTCLOUD_ROOT}/occ" files:scan \
+		--path="/${NC_USER}/files" \
+		--shallow \
+		--quiet \
+		|| true   # don't fail the push if rescan fails
 fi
 
 echo "gitviewer: repository index updated"
