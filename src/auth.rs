@@ -22,6 +22,7 @@ structstruck::strike! {
 	#[derive(Debug, Clone, Serialize, Deserialize)]
 	pub struct TokenData {
 		pub sub: String,
+        pub repo: String
 	}
 }
 

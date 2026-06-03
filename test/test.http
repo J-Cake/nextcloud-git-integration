@@ -1,4 +1,4 @@
-GET http://localhost:1920/uuid/info/refs?id=99
+GET http://localhost:1920/info/refs?id=99&service=git-upload-pack
 Accept: application/json
 Authorization: Bearer {{$auth.token("local")}}
 

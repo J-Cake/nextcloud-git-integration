@@ -13,10 +13,10 @@ mod test {
 	#[tokio::main]
 	#[test]
 	async fn test_token() -> Result<(), reqwest::Error> {
-		let res = get::<serde_json::Value>("http://git-server:1920/uuid/info/refs").await?;
+		let res = get::<serde_json::Value>("http://git-server:1920/info/refs").await?;
 		println!("Res: {res:#?}");
 
-		assert!(res.get("success").and_then(|val| val.as_bool()) == Some(true));
+		assert_eq!(res.get("success").and_then(|val| val.as_bool()), Some(true));
 
 		Ok(())
 	}
