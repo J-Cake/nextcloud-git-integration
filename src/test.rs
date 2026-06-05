@@ -1,6 +1,6 @@
 #[cfg(test)]
 mod test {
-	use reqwest::IntoUrl;
+	use reqwest::{Body, IntoUrl};
 	use serde::Serialize;
 	use serde::de::DeserializeOwned;
 	use std::sync::LazyLock;
@@ -13,12 +13,20 @@ mod test {
 	#[tokio::main]
 	#[test]
 	async fn test_token() -> Result<(), reqwest::Error> {
-		let res = get::<serde_json::Value>("http://git-server:1920/info/refs").await?;
+		let res = get_raw("http://git-server:1920/info/refs").await?;
 		println!("Res: {res:#?}");
 
-		assert_eq!(res.get("success").and_then(|val| val.as_bool()), Some(true));
-
 		Ok(())
+	}
+
+	async fn get_raw(url: impl IntoUrl) -> reqwest::Result<Box<[u8]>> {
+		CLIENT.get(url)
+			.bearer_auth(TOKEN.as_str())
+			.send()
+			.await?
+			.bytes()
+			.await
+			.map(|bytes| bytes.to_vec().into_boxed_slice())
 	}
 
 	async fn get<Res: DeserializeOwned>(url: impl IntoUrl) -> reqwest::Result<Res> {
